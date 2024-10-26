@@ -61,7 +61,7 @@ class KwargsHandler:
         Returns a dictionary containing the attributes with values different from the default of this class.
         """
         # import clear_environment here to avoid circular import problem
-        from .other import clear_environment
+        from .environment import clear_environment
 
         with clear_environment():
             default_dict = self.__class__().to_dict()
@@ -1297,7 +1297,7 @@ class DeepSpeedPlugin:
         if ds_config.get("train_batch_size", None) == "auto":
             del ds_config["train_batch_size"]
 
-        if compare_versions("transformers", "<", "4.33"):
+        if compare_versions("transformers", "<", "4.46"):
             from transformers.deepspeed import HfDeepSpeedConfig, unset_hf_deepspeed_config
         else:
             from transformers.integrations import HfDeepSpeedConfig, unset_hf_deepspeed_config
