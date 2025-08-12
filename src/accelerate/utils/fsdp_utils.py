@@ -515,8 +515,11 @@ def fsdp2_load_full_state_dict(accelerator, model: torch.nn.Module, full_sd: dic
             sharded_sd[param_name] = sharded_tensor
     # We need this else to have a matching `broadcast` for all of the ranks, else we deadlock
     else:
+        print("meta_sharded_sd", meta_sharded_sd)
         for param_name, sharded_param in meta_sharded_sd.items():
+            print("param", param_name, sharded_param)
             device_mesh = sharded_param.device_mesh
+            print("device_mesh", device_mesh)
             full_tensor = torch.empty(sharded_param.size(), device=device_mesh.device_type, dtype=sharded_param.dtype)
             dist.broadcast(full_tensor, src=0, group=device_mesh.get_group())
             sharded_tensor = distribute_tensor(full_tensor, device_mesh, sharded_param.placements)
