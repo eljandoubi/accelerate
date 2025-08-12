@@ -510,7 +510,7 @@ def fsdp2_load_full_state_dict(accelerator, model: torch.nn.Module, full_sd: dic
             from torch.distributed import get_process_group_ranks
             print("group", group, get_process_group_ranks(group))
             full_param = full_param.detach().to(device_mesh.device_type)
-            dist.broadcast(full_param, src=0, group=device_mesh.get_group(mesh_dim="dp_shard_cp"))
+            dist.broadcast(full_param, src=0, group=group)
             sharded_tensor = distribute_tensor(full_param, device_mesh, sharded_param.placements)
             to_contiguous, casting_dtype = _infer_parameter_dtype(
                 model,
