@@ -521,7 +521,7 @@ def fsdp2_load_full_state_dict(accelerator, model: torch.nn.Module, full_sd: dic
             device_mesh = sharded_param.device_mesh
             print("device_mesh", device_mesh)
             full_tensor = torch.empty(sharded_param.size(), device=device_mesh.device_type, dtype=sharded_param.dtype)
-            dist.broadcast(full_tensor, src=0, group=device_mesh.get_group())
+            dist.broadcast(full_tensor, src=0, group=device_mesh.get_group(mesh_dim="dp_shard_cp"))
             sharded_tensor = distribute_tensor(full_tensor, device_mesh, sharded_param.placements)
             to_contiguous, casting_dtype = _infer_parameter_dtype(
                 model,
