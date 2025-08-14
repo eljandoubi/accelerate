@@ -2915,6 +2915,7 @@ def get_module_class_from_name(module, name):
         name (`str`): The name of the class.
     """
     modules_children = list(module.children())
+    print("debug_module", module.__class__, module.__class__.__name__, len(modules_children))
     if module.__class__.__name__ == name:
         return module.__class__
     elif len(modules_children) == 0:
